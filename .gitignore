@@ -1,2 +1,4 @@
+
 venv
-.idead
+.idea
+db.sqlite3
