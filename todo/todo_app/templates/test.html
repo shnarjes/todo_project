@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div id="all_list">
+    {% for i in all_p %}
+<a data-status={{i.status}} href="{{i.get_absolute_url}}">
+    <h3>
+        {{i.title}}
+        {{i.status}}
+        {{i.admin_todo}}
+        {{i.team_member}}
+    
+    </h3>
+
+</a>
+
+{% endfor %}
+</div>
+
+{% endblock %}

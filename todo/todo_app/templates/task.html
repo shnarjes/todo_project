@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{%load static%}
+{% block body %}
+
+
+<div class="container">
+  <div>
+    <a href="{% url 'todoapp:taskform' project_id=project_id %}" >
+      <button class="btn btn-outline-primary w-100">Create Task</button>
+
+    </a>
+  </div>
+    
+    <select class="form-select mt-2" id="statusSelect">
+      <option selected value="all">All</option>
+      <option value="new">New</option>
+      <option value="todo">Todo</option>
+      <option value="completed">Completed</option>
+      <option value="archived">Archived</option>
+    </select>
+    <div
+      id="tasks"
+    >
+    {%for elm in  all_task%}
+            <ul class="list-group list-group-horizontal rounded-0 bg-transparent" data-status="{{elm.status}}">
+              <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
+                <div class="form-check">
+                  <input
+                    class="form-check-input me-0"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckChecked1"
+                    aria-label="..."
+                    checked
+                  />
+                </div>
+              </li>
+              <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+                <p class="lead fw-normal mb-0">{{elm.title}}</p>
+              </li>
+              
+              <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+                <p class="lead fw-normal mb-0">{{elm.text_todo}}</p>
+              </li>
+              {% comment %} <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+                <p class="lead fw-normal mb-0">{{elm.status}}</p>
+                <select class="editable-test" id="statusSelect" value="{{elm.status}}">
+                <option value="new">New</option>
+                <option value="todo">Todo</option>
+                <option value="completed">Completed</option>
+                <option value="archived">Archived</option>
+                </select>
+              </li> {% endcomment %}
+              <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
+                <div class="d-flex flex-row justify-content-end mb-1">
+                  <a href="{% url 'todoapp:updatetask' elm.id %}" class="text-info" data-mdb-toggle="tooltip" title="Edit todo"><i class="fas fa-pencil-alt me-3"></i></a>
+                   <a href="{% url 'todoapp:deletetask' elm.id elm.project.id elm.project.title%}" class="text-danger" data-mdb-toggle="tooltip" title="Delete todo"><i class="fas fa-trash-alt"></a></i>
+                </div>
+                <div class="text-end text-muted">
+                  <a href="#!" class="text-muted" data-mdb-toggle="tooltip" title="Created date">
+                    <p class="small mb-0"><i class="fas fa-info-circle me-2"></i>{{elm.end_date}}</p></a>
+                </div>
+              </li>
+            </ul>
+            {%endfor%}
+      
+    </div>
+  
+  <script>
+    const projects = document.querySelectorAll("ul")
+  
+    const projectContainer = document.querySelector("#tasks")
+  
+    const select = document.querySelector("#statusSelect")
+    select.addEventListener("change", () => {
+      projectContainer.innerHTML = ""
+  
+      projects.forEach((project) => {
+        if (select.value == "all") projectContainer.appendChild(project)
+        else if (project.getAttribute("data-status") == select.value)
+          projectContainer.appendChild(project)
+      })
+    })
+  </script>
+  
+<script src="{% static '/assets/js/date.js' %}"></script>
+<script src="{% static '/assets/js/editable_text.js' %}"></script>
+
+{% endblock %}

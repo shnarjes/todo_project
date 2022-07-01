@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<section class="vh-100">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col">
+        <div class="card" id="list1" style="border-radius: .75rem; background-color: #eff1f2;">
+          <div class="card-body py-4 px-4 px-md-5">
+
+            <p class="h1 text-center mt-3 mb-4 pb-3 text-primary">
+              <i class="fas fa-check-square me-1"></i>
+              <u>My Todo-s</u>
+            </p>
+
+            <div class="pb-2">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex flex-row align-items-center">
+                    <form method="post" action='{% url "todoapp:taskform" %}'>
+                      {% csrf_token %}
+                      <div class="form-outline mb-4">
+                        <input name="title" class="form-control" />
+                        <input type="hidden" name="proj_id" value={{detail_p.id}}>
+                        <label class="form-label" >Title</label>
+                      </div>
+
+                      <div class="form-outline mb-4">
+                        <select class="select" name="status">
+                          <option value="new">new</option>
+                          <option value="todo">todo</option>
+                          <option value="completed">Completed</option>
+                          <option value="archived">Archived</option>
+                        </select>
+                      </div>
+                      <div class="form-outline mb-4">
+                        <label for="">TodoText:</label>
+                        <input type="text" id="text_todo" name="text_todo">
+                      </div>
+
+                      <div class="form-outline mb-4">
+                        <label for="">EndTime:</label>
+                        <input type="datetime-local" id="end_date" name="end_date">
+                      </div>
+                      <div class="form-outline mb-4">
+                        <label for="">Members</label>
+                        <input id="meber" name="team_member">
+                      </div>
+
+                      <div>
+                        <button type="submit" class="btn btn-primary">
+                          Add
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="d-flex justify-content-end align-items-center mb-4 pt-2 pb-3">
+              <p class="small mb-0 me-2 text-muted">Filter</p>
+              <select class="select">
+                <option value="all">All</option>
+                <option value="new">new</option>
+                <option value="todo">todo</option>
+                <option value="completed">Completed</option>
+                <option value="archived">Archived</option>
+              </select>
+              <a href="#!" style="color: #23af89;" data-mdb-toggle="tooltip" title="Ascending"><i class="fas fa-sort-amount-down-alt ms-2"></i></a>
+            </div>
+            {%for elm in  all_task%}
+            <ul class="list-group list-group-horizontal rounded-0 bg-transparent">
+              <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
+                <div class="form-check">
+                  <input
+                    class="form-check-input me-0"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckChecked1"
+                    aria-label="..."
+                    checked
+                  />
+                </div>
+              </li>
+              <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+                <p class="lead fw-normal mb-0">{{elm.title}}</p>
+              </li>
+              <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
+                <div class="d-flex flex-row justify-content-end mb-1">
+                  <a href="#!" class="text-info" data-mdb-toggle="tooltip" title="Edit todo"><i class="fas fa-pencil-alt me-3"></i></a>
+                  <a href="{% url 'todoapp:deletetask' %}" class="text-danger" data-mdb-toggle="tooltip" title="Delete todo"><i class="fas fa-trash-alt">
+                    <form method="post" action='{% url "todoapp:deletetask" %}'>
+                      <input type="hidden" name="task_id" value="{{elm.id}}">
+                        
+                      <input type="hidden" name="proj_id" value="{{elm.project.id}}">
+                        
+                      <input type="hidden" name="proj_title" value="{{elm.project.title}}">
+                    </form>
+                  </i></a>
+                </div>
+                <div class="text-end text-muted">
+                  <a href="#!" class="text-muted" data-mdb-toggle="tooltip" title="Created date">
+                    <p class="small mb-0"><i class="fas fa-info-circle me-2"></i>{{elm.end_date}}</p></a>
+                </div>
+              </li>
+            </ul>
+            {%endfor%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

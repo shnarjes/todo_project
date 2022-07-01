@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+
+<div class="container">
+  <div>
+    <a href="{% url 'todoapp:projectform' %}" >
+      <button class="btn btn-outline-primary w-100">Create Project</button>
+
+    </a>
+  </div>
+    
+    <select class="form-select mt-2" id="statusSelect">
+      <option selected value="all">All</option>
+      <option value="new">New</option>
+      <option value="todo">Todo</option>
+      <option value="completed">Completed</option>
+      <option value="archived">Archived</option>
+    </select>
+    <div
+      id="projects"
+      class="d-flex flex-row flex-wrap justify-content-center align-items-center mt-3"
+    >
+    
+    {% for i in all_p %}
+      <a
+        data-status="{{i.status}}"
+        href="{{i.get_absolute_url}}"
+        class="card shadow text-decoration-none text-light m-2"
+        style="width: 320px; text-align: justify"
+      >
+
+      <div class="card-body bg-primary">
+            <h5 class="card-title text-light">{{i.title}}</h5>
+            <p class="card-text">
+              {{i.status}}
+              <br/>
+              {{i.admin_todo}}
+              <br/>
+              {{i.team_member}}
+    
+            </p>
+            
+      </div>
+
+      </a>
+      {% endfor %}
+      
+    </div>
+  
+  <script>
+    const projects = document.querySelectorAll("a")
+  
+    const projectContainer = document.querySelector("#projects")
+  
+    const select = document.querySelector("#statusSelect")
+    select.addEventListener("change", () => {
+      projectContainer.innerHTML = ""
+  
+      projects.forEach((project) => {
+        if (select.value == "all") projectContainer.appendChild(project)
+        else if (project.getAttribute("data-status") == select.value)
+          projectContainer.appendChild(project)
+      })
+    })
+  </script>
+  
+
+{% endblock %}
+
